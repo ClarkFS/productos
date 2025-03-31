@@ -1,0 +1,43 @@
+<section class="productos-container">
+  <div class="categorias">
+    <button
+      *ngFor="let category of categories"
+      (click)="filtrarPorCategoria(category.id_categoria)"
+      [class.active]="selectedCategory === category.id_categoria"
+    >
+      {{ category.nombre }}
+    </button>
+  </div>
+
+  <div class="productos-grid">
+    <article *ngFor="let producto of productosFiltrados" class="producto-card">
+      <div class="producto-imagen" [class.loading]="!loadedImages[producto.id_producto]">
+        <div class="skeleton-loader" *ngIf="!loadedImages[producto.id_producto]"></div>
+        <img
+          [src]="producto.url_img"
+          (load)="onImageLoad(producto.id_producto)"
+          [style.opacity]="loadedImages[producto.id_producto] ? '1' : '0'"
+          [style.display]="loadedImages[producto.id_producto] ? 'block' : 'none'"
+        />
+        <div class="producto-badge" *ngIf="producto.stock < 5">
+          Últimas unidades
+        </div>
+      </div>
+      <div class="producto-info">
+        <h3>{{ producto.nombre }}</h3>
+        <p>{{ producto.descripcion }}</p>
+        <div class="producto-meta">
+          <span class="precio">€{{ producto.precio.toFixed(2) }}</span>
+        </div>
+        <button class="agregar-carrito">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path
+              d="M19 5h-3V3a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-9-2h4v2h-4V3zm8 16H6V8h12v11z"
+            />
+          </svg>
+          Agregar al carrito
+        </button>
+      </div>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,27 @@
+<section class="hero">
+  <div class="hero-content">
+    <h1>Estilo Atemporal</h1>
+    <p class="subtitle">Diseño y confort en cada pieza</p>
+    <a routerLink="/productos" class="cta-button">Explorar colección</a>
+  </div>
+  <div class="hero-background"></div>
+</section>
+
+<section class="featured-products">
+  <div class="product-grid">
+    <article *ngFor="let product of products" class="product-card">
+      <div class="product-content" [style.backgroundImage]="'url(' + product.image + ')'">
+        <div class="product-text">
+          <h2>{{ product.title }}</h2>
+          <p>{{ product.description }}</p>
+          <a [routerLink]="product.link" class="learn-more">
+            Más información
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <path d="M8 0L6.59 1.41L12.17 7H0V9H12.17L6.59 14.59L8 16L16 8L8 0Z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
