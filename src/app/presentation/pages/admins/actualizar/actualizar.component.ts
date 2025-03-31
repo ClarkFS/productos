@@ -27,9 +27,9 @@ export class ActualizarComponent implements OnInit {
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required],
       precio: ['', [Validators.required, Validators.min(0)]],
-      id_categoria: ['', Validators.required],
+      idCategoria: ['', Validators.required],
       stock: ['', [Validators.required, Validators.min(0)]],
-      url_img: ['', Validators.required]
+      urlImg: ['', Validators.required]
     });
   }
 
@@ -58,9 +58,9 @@ export class ActualizarComponent implements OnInit {
             nombre: product.nombre,
             descripcion: product.descripcion,
             precio: product.precio,
-            id_categoria: product.idCategoria,
-            stock: product.stock,
-            url_img: product.urlImg
+            idCategoria: product.idCategoria,
+            stock: product.stock, 
+            urlImg: product.urlImg
           });
         } else {
           this.router.navigate(['/admin']);
@@ -79,7 +79,7 @@ export class ActualizarComponent implements OnInit {
         ...this.productForm.value,
         precio: Number(this.productForm.value.precio),
         stock: Number(this.productForm.value.stock),
-        id_categoria: Number(this.productForm.value.id_categoria)
+        idCategoria: Number(this.productForm.value.idCategoria)
       };
 
       this.productService.updateProduct(this.productId, updatedProduct).subscribe({
