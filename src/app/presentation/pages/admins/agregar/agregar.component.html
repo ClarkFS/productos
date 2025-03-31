@@ -27,7 +27,7 @@
         <label>Categoría</label>
         <select formControlName="id_categoria">
           <option value="">Seleccionar categoría</option>
-          <option *ngFor="let cat of categories" [value]="cat.id_categoria">
+          <option *ngFor="let cat of categories" [value]="cat.idCategoria">
             {{ cat.nombre }}
           </option>
         </select>

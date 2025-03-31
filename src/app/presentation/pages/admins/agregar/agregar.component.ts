@@ -53,8 +53,8 @@ export class AgregarComponent implements OnInit {
         descripcion: this.productForm.value.descripcion,
         precio: Number(this.productForm.value.precio),
         stock: Number(this.productForm.value.stock),
-        url_img: this.productForm.value.url_img,
-        id_categoria: Number(this.productForm.value.id_categoria),
+        urlImg: this.productForm.value.url_img,
+        idCategoria: Number(this.productForm.value.id_categoria),
       };
 
       this.productService.addProduct(newProduct).subscribe({

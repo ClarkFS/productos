@@ -58,9 +58,9 @@ export class ActualizarComponent implements OnInit {
             nombre: product.nombre,
             descripcion: product.descripcion,
             precio: product.precio,
-            id_categoria: product.id_categoria,
+            id_categoria: product.idCategoria,
             stock: product.stock,
-            url_img: product.url_img
+            url_img: product.urlImg
           });
         } else {
           this.router.navigate(['/admin']);

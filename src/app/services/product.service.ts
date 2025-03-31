@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product, Category } from '../model/product.interface';
 import { ApiConfig } from '../api/apiConfig';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-  constructor(
-    private http: HttpClient,
-    private apiConfig: ApiConfig,
-    
-  ) { }
+  constructor(private http: HttpClient, private apiConfig: ApiConfig) {}
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(
@@ -22,7 +18,9 @@ export class ProductService {
 
   getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(
-      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.getById(id)}`
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.getById(
+        id
+      )}`
     );
   }
 
@@ -35,14 +33,18 @@ export class ProductService {
 
   updateProduct(id: number, product: Partial<Product>): Observable<Product> {
     return this.http.put<Product>(
-      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.update(id)}`,
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.update(
+        id
+      )}`,
       product
     );
   }
 
   deleteProduct(id: number): Observable<boolean> {
     return this.http.delete<boolean>(
-      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.delete(id)}`
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.delete(
+        id
+      )}`
     );
   }
 
@@ -55,7 +57,9 @@ export class ProductService {
 
   getCategoryById(id: number): Observable<Category> {
     return this.http.get<Category>(
-      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.category.getById(id)}`
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.category.getById(
+        id
+      )}`
     );
   }
 

@@ -1,15 +1,15 @@
 export interface Product {
-  id_producto: number;
+  idProducto: number;
   nombre: string;
   descripcion: string;
   precio: number;
   stock: number;
-  url_img: string;
-  id_categoria: number;
-  categoria?: Category;
+  urlImg: string;
+  idCategoria: number;
+  categoria: Category | null;
 }
 
 export interface Category {
-  id_categoria: number;
+  idCategoria: number;
   nombre: string;
 }

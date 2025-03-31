@@ -25,9 +25,9 @@ export class AdminComponent implements OnInit {
 
   loadProducts() {
     this.productService.getProducts().subscribe({
-      next: (products) => {
-        console.log('Productos cargados:', JSON.stringify(products , null, 2));
+      next: (products) => { 
         this.productos = products;
+        console.log('Productos cargados:', JSON.stringify(this.productos , null, 2));
       },
       error: (error) => {
         console.error('Error cargando productos:', error);
@@ -36,20 +36,24 @@ export class AdminComponent implements OnInit {
   }
 
   deleteProduct(id: number) {
+    console.log('Eliminando producto con ID:', id);
     this.productService.deleteProduct(id).subscribe({
       next: (success) => {
         if (success) {
-          this.loadProducts(); // Recargar la lista después de eliminar
+          this.loadProducts(); 
           console.log('Producto eliminado exitosamente');
         }
       },
       error: (error) => {
         console.error('Error eliminando producto:', error);
+        if (error.status === 0) {
+          console.error('Error de CORS o servidor no disponible');
+        }
       }
     });
   }
 
   editProduct(product: Product) {
-    this.router.navigate(['/admin/actualizar', product.id_producto]);
+    this.router.navigate(['/admin/actualizar', product.idProducto]);
   }
 }

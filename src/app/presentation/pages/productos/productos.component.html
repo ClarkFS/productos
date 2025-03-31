@@ -2,8 +2,8 @@
   <div class="categorias">
     <button
       *ngFor="let category of categories"
-      (click)="filtrarPorCategoria(category.id_categoria)"
-      [class.active]="selectedCategory === category.id_categoria"
+      (click)="filtrarPorCategoria(category.idCategoria)"
+      [class.active]="selectedCategory === category.idCategoria"
     >
       {{ category.nombre }}
     </button>
@@ -11,13 +11,13 @@
 
   <div class="productos-grid">
     <article *ngFor="let producto of productosFiltrados" class="producto-card">
-      <div class="producto-imagen" [class.loading]="!loadedImages[producto.id_producto]">
-        <div class="skeleton-loader" *ngIf="!loadedImages[producto.id_producto]"></div>
+      <div class="producto-imagen" [class.loading]="!loadedImages[producto.idProducto]">
+        <div class="skeleton-loader" *ngIf="!loadedImages[producto.idProducto]"></div>
         <img
-          [src]="producto.url_img"
-          (load)="onImageLoad(producto.id_producto)"
-          [style.opacity]="loadedImages[producto.id_producto] ? '1' : '0'"
-          [style.display]="loadedImages[producto.id_producto] ? 'block' : 'none'"
+          [src]="producto.urlImg" 
+          (load)="onImageLoad(producto.idProducto)"
+          [style.opacity]="loadedImages[producto.idProducto] ? '1' : '0'"
+          [style.display]="loadedImages[producto.idProducto] ? 'block' : 'none'"
         />
         <div class="producto-badge" *ngIf="producto.stock < 5">
           Últimas unidades
