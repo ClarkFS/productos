@@ -54,7 +54,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="button" class="cancel-btn">Cancelar</button>
+      <button type="button" class="cancel-btn" [routerLink]="['/admin']">Cancelar</button>
       <button type="submit" class="submit-btn" [disabled]="!productForm.valid">
         Guardar Producto
       </button>

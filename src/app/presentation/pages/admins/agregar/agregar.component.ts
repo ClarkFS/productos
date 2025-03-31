@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Product, Category } from '../../../../model/product.interface';
 import { ProductService } from '../../../../services/product.service';
 
 @Component({
   selector: 'app-agregar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,RouterModule],
   templateUrl: './agregar.component.html',
   styleUrls: ['./agregar.component.css'],
 })
