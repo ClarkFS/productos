@@ -1,51 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product, Category } from '../../../model/product.interface';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './productos.component.html',
-  styleUrl: './productos.component.css'
+  styleUrl: './productos.component.css',
 })
-export class ProductosComponent {
-  productos: Product[] = [
-    {
-      idProducto: 1,
-      nombre: 'Chaqueta Denim Premium',
-      descripcion: 'Chaqueta vaquera de corte clásico con acabados premium y botones metálicos',
-      precio: 89.99,
-      urlImg: 'https://images.pexels.com/photos/7679720/pexels-photo-7679720.jpeg',
-      categoria: { idCategoria: 1, nombre: 'Chaquetas' },
-      stock: 23,
-      idCategoria: 1
-    }
-  ];
-
-  categories: Category[] = [
-    { idCategoria: 0, nombre: 'Todos' },
-    { idCategoria: 1, nombre: 'Chaquetas' },
-    { idCategoria: 2, nombre: 'Pantalones' },
-    { idCategoria: 3, nombre: 'Camisetas' },
-    { idCategoria: 4, nombre: 'Accesorios' }
-  ];
-
+export class ProductosComponent implements OnInit {
+  productos: Product[] = [];
+  categories: Category[] = [];
   selectedCategory: number = 0;
-
   loadedImages: { [key: number]: boolean } = {};
   imageLoaded = false;
 
-  filtrarPorCategoria(categoriaId: number) {
-    this.selectedCategory = categoriaId;
+  constructor(private productService: ProductService) {}
+
+  ngOnInit() {
+    this.loadCategories();
+    this.loadProducts();
   }
 
+  loadCategories() {
+    this.productService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = [{ idCategoria: 0, nombre: 'Todos' }, ...categories];
+      },
+      error: (error) => console.error('Error cargando categorías:', error),
+    });
+  }
+
+  loadProducts() {
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        console.log('Productos:', products);
+        this.productos = products;
+      },
+      error: (error) => console.error('Error cargando productos:', error),
+    });
+  }
+
+  filtrarPorCategoria(categoriaId: number) {
+    this.selectedCategory = categoriaId;
+    this.productService.getProductsByCategory(categoriaId).subscribe({
+      next: (products) => {
+        this.productos = products;
+      },
+      error: (error) => console.error('Error filtrando productos:', error),
+    });
+  }
   get productosFiltrados() {
     return this.selectedCategory === 0
       ? this.productos
-      : this.productos.filter(p => p.idCategoria === this.selectedCategory);
+      : this.productos.filter((p) => p.idCategoria === this.selectedCategory);
   }
-
   onImageLoad(productId: number) {
     this.loadedImages[productId] = true;
     this.imageLoaded = true;
