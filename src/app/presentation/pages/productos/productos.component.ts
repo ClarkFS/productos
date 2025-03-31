@@ -45,13 +45,8 @@ export class ProductosComponent implements OnInit {
 
   filtrarPorCategoria(categoriaId: number) {
     this.selectedCategory = categoriaId;
-    this.productService.getProductsByCategory(categoriaId).subscribe({
-      next: (products) => {
-        this.productos = products;
-      },
-      error: (error) => console.error('Error filtrando productos:', error),
-    });
   }
+
   get productosFiltrados() {
     return this.selectedCategory === 0
       ? this.productos
