@@ -26,6 +26,7 @@ export class AdminComponent implements OnInit {
   loadProducts() {
     this.productService.getProducts().subscribe({
       next: (products) => {
+        console.log('Productos cargados:', JSON.stringify(products , null, 2));
         this.productos = products;
       },
       error: (error) => {

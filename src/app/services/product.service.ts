@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Product, Category } from '../model/product.interface';
+import { ApiConfig } from '../api/apiConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +28,15 @@ export class ProductService {
     { id_categoria: 4, nombre: 'Accesorios' }
   ];
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private apiConfig: ApiConfig
+  ) { }
 
-  // Productos CRUD
   getProducts(): Observable<Product[]> {
-    return of(this.productos);
+    return this.http.get<Product[]>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.getAll}`
+    );
   }
 
   getProductById(id: number): Observable<Product | undefined> {
