@@ -40,8 +40,8 @@ export class ProductService {
     );
   }
 
-  deleteProduct(id: number): Observable<boolean> {
-    return this.http.delete<boolean>(
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(
       `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.delete(
         id
       )}`

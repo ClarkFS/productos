@@ -9,15 +9,12 @@ import { ProductService } from '../../../../services/product.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
   productos: Product[] = [];
 
-  constructor(
-    private router: Router,
-    private productService: ProductService
-  ) {}
+  constructor(private router: Router, private productService: ProductService) {}
 
   ngOnInit() {
     this.loadProducts();
@@ -25,31 +22,32 @@ export class AdminComponent implements OnInit {
 
   loadProducts() {
     this.productService.getProducts().subscribe({
-      next: (products) => { 
+      next: (products) => {
         this.productos = products;
-        console.log('Productos cargados:', JSON.stringify(this.productos , null, 2));
+        console.log(
+          'Productos cargados:',
+          JSON.stringify(this.productos, null, 2)
+        );
       },
       error: (error) => {
         console.error('Error cargando productos:', error);
-      }
+      },
     });
   }
 
   deleteProduct(id: number) {
     console.log('Eliminando producto con ID:', id);
     this.productService.deleteProduct(id).subscribe({
-      next: (success) => {
-        if (success) {
-          this.loadProducts(); 
-          console.log('Producto eliminado exitosamente');
-        }
+      next: () => {
+        this.loadProducts();
+        console.log('Producto eliminado exitosamente');
       },
       error: (error) => {
         console.error('Error eliminando producto:', error);
         if (error.status === 0) {
           console.error('Error de CORS o servidor no disponible');
         }
-      }
+      },
     });
   }
 
