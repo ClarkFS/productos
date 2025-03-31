@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Product, Category } from '../model/product.interface';
 import { ApiConfig } from '../api/apiConfig';
 
@@ -8,29 +8,10 @@ import { ApiConfig } from '../api/apiConfig';
   providedIn: 'root'
 })
 export class ProductService {
-  private productos: Product[] = [
-    {
-      id_producto: 1,
-      nombre: 'Chaqueta Denim Premium',
-      descripcion: 'Chaqueta vaquera de corte clásico con acabados premium',
-      precio: 89.99,
-      url_img: 'https://images.pexels.com/photos/7679720/pexels-photo-7679720.jpeg',
-      categoria: { id_categoria: 1, nombre: 'Chaquetas' },
-      stock: 23,
-      id_categoria: 1
-    }
-  ];
-
-  private categories: Category[] = [
-    { id_categoria: 1, nombre: 'Chaquetas' },
-    { id_categoria: 2, nombre: 'Pantalones' },
-    { id_categoria: 3, nombre: 'Camisetas' },
-    { id_categoria: 4, nombre: 'Accesorios' }
-  ];
-
   constructor(
     private http: HttpClient,
-    private apiConfig: ApiConfig
+    private apiConfig: ApiConfig,
+    
   ) { }
 
   getProducts(): Observable<Product[]> {
@@ -39,59 +20,51 @@ export class ProductService {
     );
   }
 
-  getProductById(id: number): Observable<Product | undefined> {
-    const product = this.productos.find(p => p.id_producto === id);
-    return of(product);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.getById(id)}`
+    );
   }
 
   addProduct(product: Partial<Product>): Observable<Product> {
-    const newProduct: Product = {
-      ...product,
-      id_producto: this.getNextId(),
-      categoria: this.categories.find(c => c.id_categoria === product.id_categoria)
-    } as Product;
-    
-    this.productos.push(newProduct);
-    return of(newProduct);
+    return this.http.post<Product>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.add}`,
+      product
+    );
   }
 
-  updateProduct(id: number, product: Partial<Product>): Observable<Product | undefined> {
-    const index = this.productos.findIndex(p => p.id_producto === id);
-    if (index !== -1) {
-      this.productos[index] = { 
-        ...this.productos[index], 
-        ...product,
-        categoria: this.categories.find(c => c.id_categoria === product.id_categoria)
-      };
-      return of(this.productos[index]);
-    }
-    return of(undefined);
+  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
+    return this.http.put<Product>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.update(id)}`,
+      product
+    );
   }
 
   deleteProduct(id: number): Observable<boolean> {
-    const initialLength = this.productos.length;
-    this.productos = this.productos.filter(p => p.id_producto !== id);
-    return of(initialLength !== this.productos.length);
+    return this.http.delete<boolean>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.delete(id)}`
+    );
   }
 
   // Categorías
   getCategories(): Observable<Category[]> {
-    return of(this.categories);
+    return this.http.get<Category[]>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.category.getAll}`
+    );
   }
 
-  getCategoryById(id: number): Observable<Category | undefined> {
-    return of(this.categories.find(c => c.id_categoria === id));
+  getCategoryById(id: number): Observable<Category> {
+    return this.http.get<Category>(
+      `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.category.getById(id)}`
+    );
   }
 
   getProductsByCategory(categoryId: number): Observable<Product[]> {
     if (categoryId === 0) {
-      return of(this.productos);
+      return this.getProducts();
     }
-    return of(this.productos.filter(p => p.id_categoria === categoryId));
-  }
-
-  // Utilidades
-  private getNextId(): number {
-    return Math.max(...this.productos.map(p => p.id_producto), 0) + 1;
+    return this.http.get<Product[]>(
+      `${this.apiConfig.ApiUrlBase}/api/products/by-category/${categoryId}`
+    );
   }
 }
