@@ -25,6 +25,7 @@ export class ProductService {
   }
 
   addProduct(product: Partial<Product>): Observable<Product> {
+    console.log('Adding product:', JSON.stringify(product, null, 2));
     return this.http.post<Product>(
       `${this.apiConfig.ApiUrlBase}${this.apiConfig.endpoints.product.add}`,
       product
