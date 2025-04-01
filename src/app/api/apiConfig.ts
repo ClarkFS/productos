@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ApiConfig {
-  readonly ApiUrlBase: string = 'https://bookish-funicular-pj9p599qj46vh7xrv-5015.app.github.dev';
+  readonly ApiUrlBase: string = 'http://localhost:5015';
 
   endpoints = {
     product: {
