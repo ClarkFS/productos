@@ -46,8 +46,8 @@
             (change)="onImageSelected($event)"
             accept="image/*"
           />
-          <div class="preview" *ngIf="productForm.get('url_img')?.value">
-            <img [src]="productForm.get('url_img')?.value" alt="Preview" />
+          <div class="preview" *ngIf="previewUrl">
+            <img [src]="previewUrl" alt="Preview" />
           </div>
         </div>
       </div>

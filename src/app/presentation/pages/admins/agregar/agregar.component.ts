@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Product, Category } from '../../../../model/product.interface';
 import { ProductService } from '../../../../services/product.service';
@@ -8,16 +13,17 @@ import { ProductService } from '../../../../services/product.service';
 @Component({
   selector: 'app-agregar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './agregar.component.html',
   styleUrls: ['./agregar.component.css'],
 })
-export class AgregarComponent implements OnInit {
+export class AgregarComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
   categories: Category[] = [];
+  previewUrl: string | null = null;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private productService: ProductService,
     private router: Router
   ) {
@@ -42,7 +48,7 @@ export class AgregarComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error cargando categorías:', error);
-      }
+      },
     });
   }
 
@@ -53,7 +59,11 @@ export class AgregarComponent implements OnInit {
         descripcion: this.productForm.value.descripcion,
         precio: Number(this.productForm.value.precio),
         stock: Number(this.productForm.value.stock),
-        urlImg: this.productForm.value.url_img,
+        urlImg: this.productForm.value.url_img
+          .split('\\')
+          .pop()
+          .split('/')
+          .pop(), // obtiene solo el nombre del archivo
         idCategoria: Number(this.productForm.value.id_categoria),
       };
 
@@ -64,7 +74,7 @@ export class AgregarComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al agregar producto:', error);
-        }
+        },
       });
     }
   }
@@ -72,13 +82,16 @@ export class AgregarComponent implements OnInit {
   onImageSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.productForm.patchValue({
-          url_img: e.target.result,
-        });
-      };
-      reader.readAsDataURL(file);
+      this.productForm.patchValue({
+        url_img: file.name,
+      });
+      this.previewUrl = URL.createObjectURL(file);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.previewUrl) {
+      URL.revokeObjectURL(this.previewUrl);
     }
   }
 }
